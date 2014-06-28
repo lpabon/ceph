@@ -386,19 +386,11 @@ function test_mon_mds()
   # we should never be able to add EC pools as data or metadata pools
   # create an ec-pool
   ceph osd pool create mds-ec-pool 10 10 erasure
-  set +e
-  ceph mds add_data_pool mds-ec-pool 2>$TMPFILE
-  check_response 'erasure-code' $? 22
-  set -e
+  expect_response 22 "erasure-code" ceph mds add_data_pool mds-ec-pool
   poolnum=$(ceph osd dump | grep 'pool.*mds-ec-pool' | awk '{print $2;}')
-  set +e
-  ceph mds newfs 0 $poolnum --yes-i-really-mean-it 2>$TMPFILE
-  check_response 'erasure-code' $? 22
-  ceph mds newfs $poolnum 1 --yes-i-really-mean-it 2>$TMPFILE
-  check_response 'erasure-code' $? 22
-  ceph mds newfs $poolnum $poolnum --yes-i-really-mean-it 2>$TMPFILE
-  check_response 'erasure-code' $? 22
-  set -e
+  expect_response 22 "erasure-code" ceph mds newfs 0 $poolnum --yes-i-really-mean-it
+  expect_response 22 "erasure-code" ceph mds newfs $poolnum 1 --yes-i-really-mean-it
+  expect_response 22 "erasure-code" ceph mds newfs $poolnum $poolnum --yes-i-really-mean-it
   ceph osd pool delete mds-ec-pool mds-ec-pool --yes-i-really-really-mean-it
 
   ceph mds stat
@@ -580,9 +572,12 @@ function test_mon_osd_pool_quota()
   #
   # set erroneous quotas
   #
-  expect_false ceph osd pool set-quota tmp-quota-pool max_fooness 10
-  expect_false ceph osd pool set-quota tmp-quota-pool max_bytes -1
-  expect_false ceph osd pool set-quota tmp-quota-pool max_objects aaa
+  expect_response 22 "max_fooness not in" \
+    ceph osd pool set-quota tmp-quota-pool max_fooness 10
+  expect_response 22 "error parsing value" \
+    ceph osd pool set-quota tmp-quota-pool max_bytes -1
+  expect_false 22 "error parsing value" \
+    ceph osd pool set-quota tmp-quota-pool max_objects aaa
   #
   # set valid quotas
   #
