@@ -51,6 +51,44 @@ function check_response()
 	fi
 }
 
+
+#
+# expect_response - expect a given response from the command we are running
+#
+# usage: expect_response <RETCODE> <RETSTR> <CMD>
+#
+# if <RETSTR> is empty (i.e., ""), then we shall ignore this argument.
+#
+# example:
+#   expect_response 22 "missing required parameter" ceph osd pool create bar
+#   expect_response 22 "" ceph osd pool create bar
+#
+function expect_response()
+{
+  if [[ $# -lt 3 ]]; then
+    echo "expect_response expects at least 3 arguments"
+    return 1
+  fi
+
+  local expected_retcode
+  local expected_retstr
+
+  expected_retcode=$1
+  expected_retstr=$2
+  shift 2
+  cmd=$*
+
+  echo "retcode: $expected_retcode"
+  echo "retstr: $expected_retstr"
+  echo "cmd: $cmd"
+
+  if `$cmd 2>$TMPFILE`; then
+    check_response "$expected_retstr" $? $expected_retcode
+  else
+    check_response "$expected_retstr" $? $expected_retcode
+  fi
+}
+
 function get_config_value_or_die()
 {
   local target config_opt raw val
@@ -84,6 +122,11 @@ function expect_config_value()
     echo "expected '$expected_val', got '$val'"
     exit 1
   fi
+}
+
+function test_expect_response()
+{
+  expect_response 22 "missing required" ceph osd pool create bar
 }
 
 function test_mon_injectargs_SI()
@@ -833,6 +876,9 @@ TESTS=(
   mon_heap_profiler
   osd_bench
 )
+
+# test/sanity functions: uncomment to enable
+#TESTS=("${TESTS[@]}" "expect_response")
 
 #
 # "main" follows
