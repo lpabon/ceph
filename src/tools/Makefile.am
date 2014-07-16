@@ -1,26 +1,26 @@
 ceph_osdomap_tool_SOURCES = tools/ceph_osdomap_tool.cc
-ceph_osdomap_tool_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(BOOST_PROGRAM_OPTIONS_LIBS)
+ceph_osdomap_tool_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(BOOST_PROGRAM_OPTIONS_LIBS) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph-osdomap-tool
 
 ceph_monstore_tool_SOURCES = tools/ceph_monstore_tool.cc
-ceph_monstore_tool_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(BOOST_PROGRAM_OPTIONS_LIBS)
+ceph_monstore_tool_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(BOOST_PROGRAM_OPTIONS_LIBS) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph-monstore-tool
 
 ceph_kvstore_tool_SOURCES = tools/ceph_kvstore_tool.cc
-ceph_kvstore_tool_LDADD = $(LIBOS) $(CEPH_GLOBAL)
+ceph_kvstore_tool_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 ceph_kvstore_tool_CXXFLAGS = $(UNITTEST_CXXFLAGS)
 bin_DEBUGPROGRAMS += ceph-kvstore-tool
 
 
 ceph_filestore_tool_SOURCES = tools/ceph_filestore_tool.cc
-ceph_filestore_tool_LDADD = $(LIBOSD) $(LIBOS) $(CEPH_GLOBAL) -lboost_program_options
+ceph_filestore_tool_LDADD = $(LIBOSD) $(LIBOS) $(CEPH_GLOBAL) -lboost_program_options $(LEVELDB_LIBS)
 if LINUX
 ceph_filestore_tool_LDADD += -ldl
 endif # LINUX
 bin_PROGRAMS += ceph_filestore_tool
 
 ceph_filestore_dump_SOURCES = tools/ceph_filestore_dump.cc
-ceph_filestore_dump_LDADD = $(LIBOSD) $(LIBOS) $(CEPH_GLOBAL) $(BOOST_PROGRAM_OPTIONS_LIBS)
+ceph_filestore_dump_LDADD = $(LIBOSD) $(LIBOS) $(CEPH_GLOBAL) $(BOOST_PROGRAM_OPTIONS_LIBS) $(LEVELDB_LIBS)
 if LINUX
 ceph_filestore_dump_LDADD += -ldl
 endif # LINUX
@@ -51,7 +51,7 @@ ceph_psim_LDADD = $(CEPH_GLOBAL)
 bin_DEBUGPROGRAMS += ceph_psim
 
 ceph_dupstore_SOURCES = tools/dupstore.cc
-ceph_dupstore_LDADD = $(LIBOS) $(CEPH_GLOBAL)
+ceph_dupstore_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph_dupstore
 
 ceph_radosacl_SOURCES = tools/radosacl.cc
@@ -107,7 +107,7 @@ ceph_authtool_LDADD = $(CEPH_GLOBAL) $(LIBCOMMON)
 bin_PROGRAMS += ceph-authtool
 
 ceph_mon_store_converter_SOURCES = tools/mon_store_converter.cc
-ceph_mon_store_converter_LDADD = $(LIBMON) $(LIBOS) $(CEPH_GLOBAL)
+ceph_mon_store_converter_LDADD = $(LIBMON) $(LIBOS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 bin_PROGRAMS += ceph_mon_store_converter
 
 noinst_HEADERS += \

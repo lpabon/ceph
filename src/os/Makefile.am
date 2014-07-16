@@ -31,6 +31,7 @@ endif
 
 libos_la_CXXFLAGS = ${AM_CXXFLAGS}
 libos_la_LIBADD =
+libos_la_LDFLAGS = $(LEVELDB_LIBS)
 noinst_LTLIBRARIES += libos.la
 
 noinst_HEADERS += \

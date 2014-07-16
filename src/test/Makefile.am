@@ -31,11 +31,11 @@ ceph_test_msgr_LDADD = $(CEPH_GLOBAL)
 bin_DEBUGPROGRAMS += ceph_test_msgr
 
 ceph_streamtest_SOURCES = test/streamtest.cc
-ceph_streamtest_LDADD = $(LIBOS) $(CEPH_GLOBAL)
+ceph_streamtest_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph_streamtest
 
 ceph_test_trans_SOURCES = test/test_trans.cc
-ceph_test_trans_LDADD = $(LIBOS) $(CEPH_GLOBAL)
+ceph_test_trans_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph_test_trans
 
 ceph_test_crypto_SOURCES = test/testcrypto.cc
@@ -54,7 +54,7 @@ ceph_dencoder_SOURCES = \
 	$(DENCODER_SOURCES)
 ceph_dencoder_LDADD = \
 	$(LIBOSD) $(LIBMDS) $(LIBMON) \
-	$(DENCODER_DEPS) $(CEPH_GLOBAL)
+	$(DENCODER_DEPS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 if WITH_RADOSGW
 ceph_dencoder_LDADD += $(LIBRGW) $(LIBRGW_DEPS)
 endif
@@ -71,7 +71,7 @@ endif
 bin_PROGRAMS += ceph-dencoder
 
 get_command_descriptions_SOURCES = test/common/get_command_descriptions.cc
-get_command_descriptions_LDADD = $(LIBMON) $(LIBCOMMON) $(CEPH_GLOBAL)
+get_command_descriptions_LDADD = $(LIBMON) $(LIBCOMMON) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 noinst_PROGRAMS += get_command_descriptions
 
 
@@ -135,7 +135,7 @@ ceph_smalliobench_SOURCES = \
 	test/bench/rados_backend.cc \
 	test/bench/detailed_stat_collector.cc \
 	test/bench/bencher.cc
-ceph_smalliobench_LDADD = $(LIBRADOS) $(BOOST_PROGRAM_OPTIONS_LIBS) $(CEPH_GLOBAL)
+ceph_smalliobench_LDADD = $(LIBRADOS) $(BOOST_PROGRAM_OPTIONS_LIBS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph_smalliobench
 
 ceph_smalliobenchfs_SOURCES = \
@@ -143,7 +143,7 @@ ceph_smalliobenchfs_SOURCES = \
 	test/bench/testfilestore_backend.cc \
 	test/bench/detailed_stat_collector.cc \
 	test/bench/bencher.cc
-ceph_smalliobenchfs_LDADD = $(LIBRADOS) $(BOOST_PROGRAM_OPTIONS_LIBS) $(LIBOS) $(CEPH_GLOBAL)
+ceph_smalliobenchfs_LDADD = $(LIBRADOS) $(BOOST_PROGRAM_OPTIONS_LIBS) $(LIBOS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph_smalliobenchfs
 
 ceph_smalliobenchdumb_SOURCES = \
@@ -816,7 +816,7 @@ bin_DEBUGPROGRAMS += ceph_test_libcephfs
 
 if LINUX
 ceph_test_objectstore_SOURCES = test/objectstore/store_test.cc
-ceph_test_objectstore_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL)
+ceph_test_objectstore_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 ceph_test_objectstore_CXXFLAGS = $(UNITTEST_CXXFLAGS)
 bin_DEBUGPROGRAMS += ceph_test_objectstore
 
@@ -829,14 +829,14 @@ endif
 ceph_test_objectstore_workloadgen_SOURCES = \
 	test/objectstore/workload_generator.cc \
 	test/objectstore/TestObjectStoreState.cc
-ceph_test_objectstore_workloadgen_LDADD = $(LIBOS) $(CEPH_GLOBAL)
+ceph_test_objectstore_workloadgen_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph_test_objectstore_workloadgen
 
 ceph_test_filestore_idempotent_SOURCES = \
 	test/objectstore/test_idempotent.cc \
 	test/objectstore/FileStoreTracker.cc \
 	test/common/ObjectContents.cc
-ceph_test_filestore_idempotent_LDADD = $(LIBOS) $(CEPH_GLOBAL)
+ceph_test_filestore_idempotent_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph_test_filestore_idempotent
 
 ceph_test_filestore_idempotent_sequence_SOURCES = \
@@ -844,16 +844,16 @@ ceph_test_filestore_idempotent_sequence_SOURCES = \
 	test/objectstore/DeterministicOpSequence.cc \
 	test/objectstore/TestObjectStoreState.cc \
 	test/objectstore/FileStoreDiff.cc
-ceph_test_filestore_idempotent_sequence_LDADD = $(LIBOS) $(CEPH_GLOBAL)
+ceph_test_filestore_idempotent_sequence_LDADD = $(LIBOS) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 bin_DEBUGPROGRAMS += ceph_test_filestore_idempotent_sequence
 
 ceph_xattr_bench_SOURCES = test/xattr_bench.cc
-ceph_xattr_bench_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL)
+ceph_xattr_bench_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 ceph_xattr_bench_CXXFLAGS = $(UNITTEST_CXXFLAGS)
 bin_DEBUGPROGRAMS += ceph_xattr_bench
 
 ceph_test_filejournal_SOURCES = test/test_filejournal.cc
-ceph_test_filejournal_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL)
+ceph_test_filejournal_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 ceph_test_filejournal_CXXFLAGS = $(UNITTEST_CXXFLAGS)
 bin_DEBUGPROGRAMS += ceph_test_filejournal
 
@@ -876,19 +876,19 @@ bin_DEBUGPROGRAMS += ceph_test_snap_mapper
 ceph_test_object_map_SOURCES = \
 	test/ObjectMap/test_object_map.cc \
 	test/ObjectMap/KeyValueDBMemory.cc
-ceph_test_object_map_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL)
+ceph_test_object_map_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 ceph_test_object_map_CXXFLAGS = $(UNITTEST_CXXFLAGS)
 bin_DEBUGPROGRAMS += ceph_test_object_map
 
 ceph_test_keyvaluedb_atomicity_SOURCES = test/ObjectMap/test_keyvaluedb_atomicity.cc
-ceph_test_keyvaluedb_atomicity_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL)
+ceph_test_keyvaluedb_atomicity_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 ceph_test_keyvaluedb_atomicity_CXXFLAGS = $(UNITTEST_CXXFLAGS)
 bin_DEBUGPROGRAMS += ceph_test_keyvaluedb_atomicity
 
 ceph_test_keyvaluedb_iterators_SOURCES = \
 	test/ObjectMap/test_keyvaluedb_iterators.cc \
 	test/ObjectMap/KeyValueDBMemory.cc
-ceph_test_keyvaluedb_iterators_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL)
+ceph_test_keyvaluedb_iterators_LDADD = $(LIBOS) $(UNITTEST_LDADD) $(CEPH_GLOBAL) $(LEVELDB_LIBS)
 ceph_test_keyvaluedb_iterators_CXXFLAGS = $(UNITTEST_CXXFLAGS)
 bin_DEBUGPROGRAMS += ceph_test_keyvaluedb_iterators
 

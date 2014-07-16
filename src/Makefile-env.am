@@ -178,9 +178,6 @@ LIBMON += $(LIBPERFGLUE)
 LIBOSD += $(LIBPERFGLUE)
 LIBMDS += $(LIBPERFGLUE)
 
-# Always use system leveldb
-LIBOS += -lleveldb -lsnappy
-
 # Use this for binaries requiring libglobal
 CEPH_GLOBAL = $(LIBGLOBAL) $(LIBCOMMON) $(PTHREAD_LIBS) -lm $(CRYPTO_LIBS) $(EXTRALIBS)
 
